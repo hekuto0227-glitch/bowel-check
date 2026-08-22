@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2563eb">
+  <title>排便チェック管理システム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="app-header">
+  <div>
+    <h1>排便チェック管理システム</h1>
+    <p id="todayLabel"></p>
+  </div>
+  <div class="header-actions">
+    <button class="secondary" id="testModeBtn">テストデータ</button>
+    <button class="secondary" id="backupBtn">完全バックアップ</button>
+    <button class="secondary" id="restoreBtn">復元</button>
+    <input id="restoreInput" type="file" accept=".json,application/json" hidden>
+  </div>
+</header>
+
+<main class="container">
+  <section id="alertArea"></section>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard">一覧</button>
+    <button class="tab" data-tab="record">排便入力</button>
+    <button class="tab" data-tab="history">過去データ</button>
+    <button class="tab" data-tab="settings">設定</button>
+  </nav>
+
+  <section class="tab-panel active" id="dashboard">
+    <div class="toolbar">
+      <input id="searchInput" type="search" placeholder="利用者名を検索">
+      <select id="statusFilter">
+        <option value="all">全員</option>
+        <option value="warning">3日目以上</option>
+        <option value="alert">4日目以上</option>
+        <option value="female">月経管理あり</option>
+      </select>
+      <button id="addUserBtn">＋ 利用者追加</button>
+    </div>
+    <div id="dashboardCards" class="cards"></div>
+  </section>
+
+  <section class="tab-panel" id="record">
+    <div class="panel">
+      <h2>本日の排便入力</h2>
+      <div class="form-grid">
+        <label>利用者
+          <select id="recordUser"></select>
+        </label>
+        <label>日付
+          <input id="recordDate" type="date">
+        </label>
+        <label>排便確認
+          <select id="bowelConfirmed">
+            <option value="false">なし（未記録）</option>
+            <option value="true">○ あり</option>
+          </select>
+        </label>
+        <label>時刻
+          <input id="recordTime" type="time">
+        </label>
+        <label>量
+          <select id="amount">
+            <option value="">—</option>
+            <option value="small">少量</option>
+            <option value="normal">普通</option>
+            <option value="large">多量</option>
+          </select>
+        </label>
+        <label>ブリストル
+          <select id="bristol">
+            <option value="">—</option>
+            <option value="1">1：硬い小塊</option>
+            <option value="2">2：硬便</option>
+            <option value="3">3：やや硬め</option>
+            <option value="4">4：普通</option>
+            <option value="5">5：やや軟らかい</option>
+            <option value="6">6：泥状</option>
+            <option value="7">7：水様</option>
+          </select>
+        </label>
+        <label>形状（表示用）
+          <select id="shape">
+            <option value="">—</option>
+            <option value="硬">硬</option>
+            <option value="やや硬">やや硬</option>
+            <option value="普通">普通</option>
+            <option value="軟">軟</option>
+            <option value="泥状">泥状</option>
+            <option value="水様">水様</option>
+          </select>
+        </label>
+        <label class="check-row"><input id="laxativeUsed" type="checkbox"> 緩下剤を使用</label>
+        <label class="check-row"><input id="enemaUsed" type="checkbox"> 浣腸を使用</label>
+        <label class="wide">その他・備考
+          <textarea id="note" rows="3" placeholder="自由に入力"></textarea>
+        </label>
+      </div>
+      <div class="button-row">
+        <button class="primary" id="saveRecordBtn">保存する</button>
+        <button class="secondary" id="clearRecordBtn">入力をクリア</button>
+      </div>
+      <p class="hint">排便ありで保存すると、その日の「前回排便からの日数」は0日目にリセットされます。未記録日は排便なしとして日数を計算します。</p>
+    </div>
+
+    <div class="panel">
+      <h2>月経（女性のみ）</h2>
+      <div class="form-grid">
+        <label>利用者
+          <select id="menstrualUser"></select>
+        </label>
+        <label>日付
+          <input id="menstrualDate" type="date">
+        </label>
+        <label>状態
+          <select id="menstrualStatus">
+            <option value="none">記録なし</option>
+            <option value="start">開始</option>
+            <option value="ongoing">継続中</option>
+            <option value="end">終了</option>
+          </select>
+        </label>
+        <label class="wide">メモ
+          <input id="menstrualNote" type="text" placeholder="自由入力">
+        </label>
+      </div>
+      <div class="button-row">
+        <button class="primary" id="saveMenstrualBtn">月経を保存</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="history">
+    <div class="panel">
+      <h2>過去データ・出力</h2>
+      <div class="form-grid">
+        <label>利用者
+          <select id="historyUser"></select>
+        </label>
+        <label>開始日
+          <input id="historyStart" type="date">
+        </label>
+        <label>終了日
+          <input id="historyEnd" type="date">
+        </label>
+        <label>出力対象
+          <select id="historyScope">
+            <option value="person">選択した個人（A4）</option>
+            <option value="all">全員（A3・半月分を想定）</option>
+          </select>
+        </label>
+      </div>
+      <div class="button-row">
+        <button id="csvBtn">CSVを書き出す</button>
+        <button id="printBtn">Excel用A4/A3帳票を作る</button>
+      </div>
+      <p class="hint">帳票はExcelで開ける形式のHTML表を生成し、印刷時にA4/A3へ合わせられるようにしています。CSVはExcelでそのまま開けます。</p>
+      <div id="historyTableWrap"></div>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="settings">
+    <div class="panel">
+      <h2>利用者設定</h2>
+      <div class="toolbar">
+        <button id="addUserBtn2">＋ 利用者追加</button>
+      </div>
+      <div id="userSettingsList"></div>
+    </div>
+    <div class="panel">
+      <h2>判定・薬剤設定</h2>
+      <div class="form-grid">
+        <label>注意開始日数（例：3日目）
+          <input id="warningDays" type="number" min="1" max="30">
+        </label>
+        <label>強い警告日数（例：4日目）
+          <input id="alertDays" type="number" min="1" max="30">
+        </label>
+      </div>
+      <div class="button-row">
+        <button class="primary" id="saveSettingsBtn">設定を保存</button>
+      </div>
+      <p class="hint">緩下剤・浣腸は利用者ごとに設定・変更できます。設定は後から何度でも変更可能です。</p>
+    </div>
+    <div class="panel">
+      <h2>データ保護</h2>
+      <p>アプリ更新時も、保存データはGitHubのコードとは別にブラウザへ保存されます。アプリは既存データを初期化せず、データバージョンに応じて移行します。大切なデータは定期的に「完全バックアップ」でJSON保存してください。</p>
+      <div class="button-row">
+        <button id="exportDataBtn">完全バックアップを保存</button>
+        <button id="importTestBtn">テストデータを読み込む</button>
+        <input id="testInput" type="file" accept=".json,application/json" hidden>
+        <button class="danger" id="clearTestBtn">テストモードを終了</button>
+      </div>
+      <p id="storageStatus" class="hint"></p>
+    </div>
+  </section>
+</main>
+
+<dialog id="userDialog">
+  <form method="dialog" id="userForm">
+    <h2 id="userDialogTitle">利用者追加</h2>
+    <input id="editUserId" type="hidden">
+    <label>利用者名<input id="userName" required></label>
+    <label>性別
+      <select id="userGender">
+        <option value="unknown">未設定</option>
+        <option value="male">男性</option>
+        <option value="female">女性</option>
+      </select>
+    </label>
+    <label class="check-row"><input id="menstrualManagement" type="checkbox"> 月経管理を使用</label>
+    <label>緩下剤名（未使用なら空欄）<input id="userLaxativeName"></label>
+    <label>緩下剤の目安日数<input id="userLaxativeDays" type="number" min="0" max="30" value="0"></label>
+    <label>浣腸名（未使用なら空欄）<input id="userEnemaName"></label>
+    <label>浣腸の目安日数<input id="userEnemaDays" type="number" min="0" max="30" value="0"></label>
+    <div class="button-row">
+      <button value="cancel" class="secondary">キャンセル</button>
+      <button value="default" class="primary" id="saveUserBtn">保存</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

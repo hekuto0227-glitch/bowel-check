@@ -1,0 +1,11 @@
+{
+  "dataVersion": 2,
+  "testMode": true,
+  "users": [],
+  "bowelRecords": [],
+  "menstrualRecords": [],
+  "systemSettings": {
+    "warningDays": 3,
+    "alertDays": 4
+  }
+}

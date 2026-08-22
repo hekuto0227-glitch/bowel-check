@@ -1,12 +1,44 @@
 {
-  "schemaVersion": 1,
-  "appVersion": "0.1.0",
-  "users": [],
-  "bowelRecords": [],
-  "menstrualRecords": [],
-  "medicationSettings": [],
+  "dataVersion": 2,
+  "appVersion": "1.0.0",
+  "testMode": false,
+  "users": [
+    {
+      "id": "U001",
+      "name": "利用者名",
+      "gender": "female",
+      "menstrualManagement": true,
+      "laxative": {"enabled": true, "name": "薬剤名", "conditionDays": 3},
+      "enema": {"enabled": false, "name": "", "conditionDays": 4},
+      "active": true
+    }
+  ],
+  "bowelRecords": [
+    {
+      "id": "R001",
+      "userId": "U001",
+      "date": "YYYY-MM-DD",
+      "bowelConfirmed": true,
+      "time": "09:00",
+      "amount": "normal",
+      "bristol": 4,
+      "shape": "普通",
+      "laxativeUsed": false,
+      "enemaUsed": false,
+      "note": ""
+    }
+  ],
+  "menstrualRecords": [
+    {
+      "id": "M001",
+      "userId": "U001",
+      "date": "YYYY-MM-DD",
+      "status": "start",
+      "note": ""
+    }
+  ],
   "systemSettings": {
-    "attentionDay": 3,
-    "warningDay": 4
+    "warningDays": 3,
+    "alertDays": 4
   }
 }
