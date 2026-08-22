@@ -1,1 +1,23 @@
-
+{
+  "schemaVersion": 1,
+  "appVersion": "0.1.0-test",
+  "users": [
+    {"id":"TEST001","name":"テスト太郎","sex":"male","menstrualManagement":false,"laxative":{"enabled":true,"name":"緩下剤A","conditionDay":3},"enema":{"enabled":false,"name":"","conditionDay":4}},
+    {"id":"TEST002","name":"テスト花子","sex":"female","menstrualManagement":true,"laxative":{"enabled":false,"name":"","conditionDay":3},"enema":{"enabled":true,"name":"浣腸B","conditionDay":4}},
+    {"id":"TEST003","name":"テスト次郎","sex":"male","menstrualManagement":false,"laxative":{"enabled":false,"name":"","conditionDay":3},"enema":{"enabled":false,"name":"","conditionDay":4}},
+    {"id":"TEST004","name":"テスト三郎","sex":"male","menstrualManagement":false,"laxative":{"enabled":true,"name":"緩下剤C","conditionDay":4},"enema":{"enabled":true,"name":"浣腸D","conditionDay":4}}
+  ],
+  "bowelRecords": [
+    {"id":"R001","userId":"TEST001","date":"2026-08-22","time":"09:00","confirmed":true,"amount":"普通","shape":"普通","bristol":4,"laxativeUsed":false,"enemaUsed":false,"notes":"テスト排便"},
+    {"id":"R002","userId":"TEST002","date":"2026-08-20","time":"08:30","confirmed":true,"amount":"少量","shape":"硬","bristol":2,"laxativeUsed":false,"enemaUsed":false,"notes":""},
+    {"id":"R003","userId":"TEST003","date":"2026-08-19","time":"10:15","confirmed":true,"amount":"普通","shape":"軟","bristol":5,"laxativeUsed":true,"enemaUsed":false,"notes":""}
+  ],
+  "menstrualRecords": [
+    {"id":"M001","userId":"TEST002","date":"2026-08-21","status":"start","notes":"テスト月経開始"}
+  ],
+  "medicationSettings": [],
+  "systemSettings": {
+    "attentionDay": 3,
+    "warningDay": 4
+  }
+}
