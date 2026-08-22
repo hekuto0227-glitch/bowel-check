@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "appVersion": "0.1.0",
+  "users": [],
+  "bowelRecords": [],
+  "menstrualRecords": [],
+  "medicationSettings": [],
+  "systemSettings": {
+    "attentionDay": 3,
+    "warningDay": 4
+  }
+}
